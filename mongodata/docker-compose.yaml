@@ -1,0 +1,22 @@
+version: '3'
+
+networks:
+  mongo_network:
+    driver: bridge
+
+services:
+  mongo1:
+    hostname: mongo1
+    image: mongo
+    ports:
+      - 27017:27017
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--config", "/data/config/mongodb.conf", "--bind_ip_all" ]
+    networks:
+      - mongo_network
+    volumes:
+      - ./.db/mongo1:/data/db
+      - ./wait-for-mongodb.sh:/scripts/wait-for-mongodb.sh
+      - ./init.sh:/scripts/init.sh
+      - ./ssl:/data/ssl
+      - ./config:/data/config
